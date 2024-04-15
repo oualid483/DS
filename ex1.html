@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Exercice Transaction</title>
+</head>
+<body>
+
+<h2>Formulaire de Transaction</h2>
+
+<div>
+<label for="produit">Produit :</label>
+<select id="produit">
+<!-- Les options seront ajoutées par JavaScript -->
+</select>
+<input type="text" id="nouveauProduit" placeholder="Ajouter un nouveau produit">
+<button id="ajouterProduit">Ajouter Produit</button>
+</div>
+
+<div>
+<label for="prix">Prix :</label>
+<input type="number" id="prix">
+</div>
+
+<div>
+<label for="quantite">Quantité :</label>
+<input type="number" id="quantite">
+</div>
+
+<button id="ajouterTransaction">Ajouter Transaction</button>
+
+<h2>Transactions</h2>
+<table id="tableauTransactions">
+<thead>
+<tr>
+<th>Produit</th>
+<th>Prix</th>
+<th>Quantité</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<!-- Les transactions seront ajoutées par JavaScript -->
+</tbody>
+</table>
+
+<div>
+<p>Total des prix: <span id="totalPrix">0</span></p>
+<p>Nombre de transactions: <span id="nombreTransactions">0</span></p>
+</div>
+
+<script>
+// Récupération des éléments du DOM
+const produitSelect = document.getElementById('produit');
+const nouveauProduitInput = document.getElementById('nouveauProduit');
+const prixInput = document.getElementById('prix');
+const quantiteInput = document.getElementById('quantite');
+const ajouterTransactionBtn = document.getElementById('ajouterTransaction');
+const tableauTransactions = document.getElementById('tableauTransactions').getElementsByTagName('tbody')[0];
+const totalPrixSpan = document.getElementById('totalPrix');
+const nombreTransactionsSpan = document.getElementById('nombreTransactions');
+
+// Fonction pour ajouter un nouveau produit à la liste déroulante
+function ajouterProduit() {
+    const nouveauProduit = nouveauProduitInput.value.trim();
+    if (nouveauProduit !== '') {
+        const option = document.createElement('option');
+        option.text = nouveauProduit;
+        produitSelect.add(option);
+        nouveauProduitInput.value = ''; // Réinitialiser le champ texte
+    }
+}
+
+// Écouteur d'événement pour le bouton "Ajouter Produit"
+document.getElementById('ajouterProduit').addEventListener('click', ajouterProduit);
+
+// Fonction pour ajouter une transaction au tableau
+function ajouterTransaction() {
+    const produit = produitSelect.value;
+    const prix = parseFloat(prixInput.value);
+    const quantite = parseInt(quantiteInput.value);
+
+    // Vérifier si les champs sont valides
+    if (produit === '' || isNaN(prix) || isNaN(quantite) || prix <= 0 || quantite <= 0) {
+        alert('Veuillez remplir tous les champs avec des valeurs valides.');
+        return;
+    }
+
+    // Créer une nouvelle ligne dans le tableau
+    const newRow = tableauTransactions.insertRow();
+    const cellProduit = newRow.insertCell(0);
+    const cellPrix = newRow.insertCell(1);
+    const cellQuantite = newRow.insertCell(2);
+    const cellTotal = newRow.insertCell(3);
+    cellProduit.textContent = produit;
+    cellPrix.textContent = prix.toFixed(2); // Affichage du prix avec deux décimales
+    cellQuantite.textContent = quantite;
+    cellTotal.textContent = (prix * quantite).toFixed(2); // Calcul et affichage du total avec deux décimales
+
+    // Mettre à jour le total des prix et le nombre de transactions
+    totalPrixSpan.textContent = (parseFloat(totalPrixSpan.textContent) + prix * quantite).toFixed(2);
+    nombreTransactionsSpan.textContent = parseInt(nombreTransactionsSpan.textContent) + 1;
+
+    // Réinitialiser les champs du formulaire
+    prixInput.value = '';
+    quantiteInput.value = '';
+}
+
+// Écouteur d'événement pour le bouton "Ajouter Transaction"
+ajouterTransactionBtn.addEventListener('click', ajouterTransaction);
+
+</script>
+
+</body>
+</html>

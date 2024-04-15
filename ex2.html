@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Todo List</title>
+<style>
+.task {
+margin: 10px 0;
+padding: 10px;
+background-color: #f4f4f4;
+border-radius: 5px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.task.completed {
+text-decoration: line-through;
+background-color: #dcdcdc;
+}
+.task button {
+margin-left: 10px;
+}
+</style>
+</head>
+<body>
+
+
+<h2>Ma liste de tâches</h2>
+<button class="creetask">Cree</button>
+<div id="todoList">
+<!-- Exemple de tâche -->
+<div class="task" data-task-id="1">
+<span>Faire les courses</span>
+<div>
+<button class="completeTask">Accomplir</button>
+<button class="deleteTask">Supprimer</button>
+</div>
+</div>
+<!-- Les tâches suivantes seront ajoutées ici -->
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const todoList = document.getElementById('todoList');
+
+    // Fonction pour marquer une tâche comme accomplie
+    function completeTask(event) {
+        const task = event.target.closest('.task');
+        task.classList.toggle('completed');
+    }
+
+    // Fonction pour supprimer une tâche de la liste
+    function deleteTask(event) {
+        const task = event.target.closest('.task');
+        task.remove();
+    }
+
+    // Fonction pour créer une nouvelle tâche
+    function createTask(taskName) {
+        const newTask = document.createElement('div');
+        newTask.classList.add('task');
+        newTask.innerHTML = `
+            <span>${taskName}</span>
+            <div>
+                <button class="completeTask">Accomplir</button>
+                <button class="deleteTask">Supprimer</button>
+            </div>
+        `;
+        todoList.appendChild(newTask);
+    }
+
+    // Ajouter un écouteur d'événement pour le bouton "Créer"
+    const createTaskBtn = document.querySelector('.creetask');
+    createTaskBtn.addEventListener('click', function() {
+        const taskName = prompt("Entrez le nom de la nouvelle tâche :");
+        if (taskName) {
+            createTask(taskName);
+        }
+    });
+
+    // Ajouter un écouteur d'événement à la liste pour gérer les clics sur les boutons "Accomplir" et "Supprimer"
+    todoList.addEventListener('click', function(event) {
+        if (event.target.classList.contains('completeTask')) {
+            completeTask(event);
+        } else if (event.target.classList.contains('deleteTask')) {
+            deleteTask(event);
+        }
+    });
+
+    // Exemple d'ajout d'une nouvelle tâche
+    createTask("Faire le ménage");
+
+    // Vous pouvez appeler createTask() avec le nom de la tâche que vous souhaitez ajouter
+});
+
+
+
+</script>
+
+</body>
+</html>
